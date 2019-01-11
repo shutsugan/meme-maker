@@ -8,7 +8,9 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
-app.use('graphql', graphqlHTTP({
+app.use('/graphql', graphqlHTTP({
   schema,
   graphiql: true
 }));
+
+app.listen(port, _ => console.log('Server running...'));

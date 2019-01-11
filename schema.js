@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 const base_url = 'https://jsonplaceholder.typicode.com/';
 const meme_url = `${base_url}photos`;
 const album_url = `${base_url}albums`;
@@ -28,8 +30,7 @@ const AlbumType = new GraphQLObjectType({
   fields: _ => ({
     userId: {type: GraphQLInt},
     id: {type: GraphQLInt},
-    title: {type: GraphQLString},
-    meme: {type: MemeType}
+    title: {type: GraphQLString}
   })
 });
 
@@ -39,8 +40,8 @@ const UserType = new GraphQLObjectType({
     id: {type: GraphQLInt},
     username: {type: GraphQLString},
     email: {type: GraphQLString},
-    eddress: {type: AddressType},
-    phone: {type: GraphQLInt},
+    address: {type: AddressType},
+    phone: {type: GraphQLString},
     website: {type: GraphQLString},
     company: {type: CompanyType}
   })
@@ -60,8 +61,8 @@ const AddressType = new GraphQLObjectType({
 const GeoType = new GraphQLObjectType({
   name: 'Geo',
   fields: _ => ({
-    lat: {type: GraphQLInt},
-    lng: {type: GraphQLInt}
+    lat: {type: GraphQLString},
+    lng: {type: GraphQLString}
   })
 });
 
@@ -82,7 +83,6 @@ const RootQuery = new GraphQLObjectType({
         const res = await fetch(meme_url);
         const data = await res.json();
 
-        console.log('memes', data);
         return data;
       }
     },
@@ -95,7 +95,6 @@ const RootQuery = new GraphQLObjectType({
         const res = await fetch(`${meme_url}/${args.id}`);
         const data = await res.json();
 
-        console.log('meme', data);
         return data;
       }
     },
@@ -103,9 +102,8 @@ const RootQuery = new GraphQLObjectType({
       type: new GraphQLList(AlbumType),
       async resolve(parent, args) {
         const res = await fetch(album_url);
-        const data = res.json();
+        const data = await res.json();
 
-        console.log('Albums', data);
         return data;
       }
     },
@@ -126,9 +124,9 @@ const RootQuery = new GraphQLObjectType({
       type: GraphQLList(UserType),
       async resolve(parent, args) {
         const res = await fetch(user_url);
-        const data = res.json();
+        const data = await res.json();
 
-        console.log('users', data);
+        console.log(data);
         return data;
       }
     },
@@ -141,7 +139,6 @@ const RootQuery = new GraphQLObjectType({
         const res = await fetch(`${user_url}/${args.id}`);
         const data = await res.json();
 
-        console.log('user', data);
         return data;
       }
     }
