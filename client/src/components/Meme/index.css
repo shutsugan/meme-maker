@@ -1,0 +1,9 @@
+.meme h3 {
+  font-size: .8em;
+  font-weight: normal;
+}
+
+.meme img {
+  width: 100%;
+  height: auto;
+}

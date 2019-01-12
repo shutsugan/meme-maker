@@ -1,0 +1,8 @@
+.memes {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 16px;
+  padding: 16px;
+}

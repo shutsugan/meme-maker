@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 
-const base_url = 'https://jsonplaceholder.typicode.com/';
-const meme_url = `${base_url}photos`;
+const base_url = 'https://memes-maker-28fe4.firebaseio.com/';
+const meme_url = `${base_url}memes.json`;
 const album_url = `${base_url}albums`;
 const user_url = `${base_url}users`;
 
@@ -17,11 +17,9 @@ const {
 const MemeType = new GraphQLObjectType({
   name: 'Meme',
   fields: _ => ({
-    albumId: {type: GraphQLInt},
     id: {type: GraphQLInt},
     title: {type: GraphQLString},
-    url: {type: GraphQLString},
-    thumbnailUrl: {type: GraphQLString}
+    image: {type: GraphQLString},
   })
 });
 
@@ -82,8 +80,8 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args) {
         const res = await fetch(meme_url);
         const data = await res.json();
-
-        return data;
+        
+        return Object.values(data).map(meme => meme);
       }
     },
     meme: {
@@ -126,7 +124,6 @@ const RootQuery = new GraphQLObjectType({
         const res = await fetch(user_url);
         const data = await res.json();
 
-        console.log(data);
         return data;
       }
     },
