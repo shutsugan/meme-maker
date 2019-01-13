@@ -2,8 +2,7 @@ const fetch = require('node-fetch');
 
 const base_url = 'https://memes-maker-28fe4.firebaseio.com/';
 const meme_url = `${base_url}memes.json`;
-const album_url = `${base_url}albums`;
-const user_url = `${base_url}users`;
+const user_url = `${base_url}users.json`;
 
 const {
   GraphQLObjectType,
@@ -11,7 +10,8 @@ const {
   GraphQLString,
   GraphQLBoolean,
   GraphQLList,
-  GraphQLSchema
+  GraphQLSchema,
+  GraphQLNonNull
 } = require('graphql');
 
 const MemeType = new GraphQLObjectType({
@@ -20,15 +20,6 @@ const MemeType = new GraphQLObjectType({
     id: {type: GraphQLInt},
     title: {type: GraphQLString},
     image: {type: GraphQLString},
-  })
-});
-
-const AlbumType = new GraphQLObjectType({
-  name: 'Album',
-  fields: _ => ({
-    userId: {type: GraphQLInt},
-    id: {type: GraphQLInt},
-    title: {type: GraphQLString}
   })
 });
 
@@ -80,7 +71,7 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args) {
         const res = await fetch(meme_url);
         const data = await res.json();
-        
+
         return Object.values(data).map(meme => meme);
       }
     },
@@ -90,32 +81,10 @@ const RootQuery = new GraphQLObjectType({
         id: {type: GraphQLInt}
       },
       async resolve(parent, args) {
-        const res = await fetch(`${meme_url}/${args.id}`);
+        const res = await fetch(meme_url);
         const data = await res.json();
 
-        return data;
-      }
-    },
-    albums: {
-      type: new GraphQLList(AlbumType),
-      async resolve(parent, args) {
-        const res = await fetch(album_url);
-        const data = await res.json();
-
-        return data;
-      }
-    },
-    album: {
-      type: AlbumType,
-      args: {
-        id: {type: GraphQLInt}
-      },
-      async resolve(parent, args) {
-        const res = await fetch(`${album_url}/${args.id}`);
-        const data = await res.json();
-
-        console.log('album', data);
-        return data;
+        return Object.values(data).filter(meme => meme.id === args.id).pop();
       }
     },
     users: {
@@ -142,4 +111,34 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
-module.exports = new GraphQLSchema({query: RootQuery});
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addMeme: {
+      type: MemeType,
+      args: {
+        title: {type: new GraphQLNonNull(GraphQLString)},
+        image: {type: new GraphQLNonNull(GraphQLString)}
+      },
+      async resolve(parent, {title, image}) {
+        const id = Math.floor(Math.random() * Math.floor(19999));
+        const meme = {id, title, image};
+        const options = {
+          method: 'post',
+          body: JSON.stringify(meme),
+          headers: {'Content-Type': 'application/json'}
+        };
+
+        const res = await fetch(meme_url, options);
+        const data = await res.json();
+
+        return data;
+      }
+    }
+  }
+})
+
+module.exports = new GraphQLSchema({
+  query: RootQuery,
+  mutation: Mutation
+});

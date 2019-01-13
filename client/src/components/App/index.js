@@ -3,8 +3,8 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider} from 'react-apollo';
 
 import Memes from '../Memes';
+import AddMeme from '../AddMeme';
 
-import logo from './logo.svg';
 import './App.css';
 
 const client = new ApolloClient({
@@ -15,7 +15,7 @@ const App = _ => (
   <ApolloProvider client={client}>
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <AddMeme />
         <Memes />
       </header>
     </div>
