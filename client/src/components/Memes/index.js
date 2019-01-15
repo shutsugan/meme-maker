@@ -1,36 +1,43 @@
-import React, { Fragment} from 'react';
-import gql from 'graphql-tag';
+import React, { Fragment, useState } from 'react';
 import { Query } from 'react-apollo';
 
 import Meme from '../Meme';
+import AddMeme from '../AddMeme';
+import DisplayMeme from '../DisplayMeme';
+import { MEMES_QUERY } from '../../queries/memes';
 
 import './index.css';
 
-const MEMES_QUERY = gql`
-  query memesQuery {
-    memes {
-      id
-      title
-      image
-    }
-  }
-`;
-
 const Memes = _ => {
+  const [meme, setMeme] = useState({});
+  const handleMeme = meme => setMeme(meme);
+
   return (
     <Fragment>
-      <h1>Memes List</h1>
+      <div className="memes memes__updater">
+        <AddMeme meme={meme} />
+        <DisplayMeme meme={meme} clicked={handleMeme} />
+      </div>
       <div className="memes">
-        <Query query={MEMES_QUERY}>
-          {
-            ({loading, error, data}) => {
-              if (loading) return <div className="loading">Loading...</div>
-              if (error) return <div className="error">error {error}</div>
+        <h2>Memes List</h2>
+        <div className="memes__list">
+          <Query query={MEMES_QUERY}>
+            {
+              ({loading, error, data}) => {
+                if (loading) return <div className="loading">Loading...</div>
+                if (error) return <div className="error">error {error}</div>
 
-              return data.memes.map(meme => <Meme key={meme.id} meme={meme} />);
+                return data.memes.map(meme => (
+                  <Meme
+                    key={meme.id}
+                    meme={meme}
+                    clicked={handleMeme}
+                  />
+                ));
+              }
             }
-          }
-        </Query>
+          </Query>
+        </div>
       </div>
     </Fragment>
   );

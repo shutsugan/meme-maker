@@ -1,8 +1,25 @@
 .memes {
-  width: 100%;
+  width: 50%;
   height: auto;
+}
+
+.memes__list {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
   padding: 16px;
+}
+
+.memes__updater {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.memes__updater h2 {
+  color: #282c34;
 }

@@ -6,6 +6,7 @@ const user_url = `${base_url}users.json`;
 
 const {
   GraphQLObjectType,
+  GraphQLID,
   GraphQLInt,
   GraphQLString,
   GraphQLBoolean,
@@ -17,7 +18,7 @@ const {
 const MemeType = new GraphQLObjectType({
   name: 'Meme',
   fields: _ => ({
-    id: {type: GraphQLInt},
+    id: {type: GraphQLID},
     title: {type: GraphQLString},
     image: {type: GraphQLString},
   })
@@ -26,7 +27,7 @@ const MemeType = new GraphQLObjectType({
 const UserType = new GraphQLObjectType({
   name: 'User',
   fields: _ => ({
-    id: {type: GraphQLInt},
+    id: {type: GraphQLID},
     username: {type: GraphQLString},
     email: {type: GraphQLString},
     address: {type: AddressType},
@@ -71,20 +72,27 @@ const RootQuery = new GraphQLObjectType({
       async resolve(parent, args) {
         const res = await fetch(meme_url);
         const data = await res.json();
+        const keys = Object.keys(data);
 
-        return Object.values(data).map(meme => meme);
+        return Object.values(data).map((meme, index) => {
+          return {...meme, id: keys[index]}
+        });
       }
     },
     meme: {
       type: MemeType,
       args: {
-        id: {type: GraphQLInt}
+        title: {type: GraphQLString}
       },
       async resolve(parent, args) {
         const res = await fetch(meme_url);
         const data = await res.json();
+        const keys = Object.keys(data);
 
-        return Object.values(data).filter(meme => meme.id === args.id).pop();
+        return Object.values(data)
+          .filter((meme, index) => {
+            if (meme.title === args.title) return {...meme, id: keys[index]};
+          }).pop();
       }
     },
     users: {
@@ -99,7 +107,7 @@ const RootQuery = new GraphQLObjectType({
     user: {
       type: UserType,
       args: {
-        id: {type: GraphQLInt},
+        id: {type: GraphQLID},
       },
       async resolve(parent, args) {
         const res = await fetch(`${user_url}/${args.id}`);
@@ -121,8 +129,7 @@ const Mutation = new GraphQLObjectType({
         image: {type: new GraphQLNonNull(GraphQLString)}
       },
       async resolve(parent, {title, image}) {
-        const id = Math.floor(Math.random() * Math.floor(19999));
-        const meme = {id, title, image};
+        const meme = {title, image};
         const options = {
           method: 'post',
           body: JSON.stringify(meme),
@@ -132,6 +139,28 @@ const Mutation = new GraphQLObjectType({
         const res = await fetch(meme_url, options);
         const data = await res.json();
 
+        return data;
+      }
+    },
+    updateMeme: {
+      type: MemeType,
+      args: {
+        id: {type: new GraphQLNonNull(GraphQLID)},
+        title: {type: new GraphQLNonNull(GraphQLString)},
+        image: {type: new GraphQLNonNull(GraphQLString)}
+      },
+      async resolve(parent, {id, title, image}) {
+        //TODO: object structure shou
+        const meme = {[id]: {title, image}};
+        const options = {
+          method: 'put',
+          body: JSON.stringify(meme),
+          headers: {'Content-Type': 'application/json'}
+        };
+
+        const res = await fetch(meme_url, options);
+        const data = await res.json();
+        console.log('=>', data);
         return data;
       }
     }
