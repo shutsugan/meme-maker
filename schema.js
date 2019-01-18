@@ -20,6 +20,8 @@ const MemeType = new GraphQLObjectType({
   fields: _ => ({
     id: {type: GraphQLID},
     title: {type: GraphQLString},
+    tcomment: {type: GraphQLString},
+    bcomment: {type: GraphQLString},
     image: {type: GraphQLString},
   })
 });
@@ -126,10 +128,12 @@ const Mutation = new GraphQLObjectType({
       type: MemeType,
       args: {
         title: {type: new GraphQLNonNull(GraphQLString)},
+        tcomment: {type: new GraphQLNonNull(GraphQLString)},
+        bcomment: {type: new GraphQLNonNull(GraphQLString)},
         image: {type: new GraphQLNonNull(GraphQLString)}
       },
-      async resolve(parent, {title, image}) {
-        const meme = {title, image};
+      async resolve(parent, {title, tcomment, bcomment, image}) {
+        const meme = {title, tcomment, bcomment, image};
         const options = {
           method: 'post',
           body: JSON.stringify(meme),
@@ -147,18 +151,19 @@ const Mutation = new GraphQLObjectType({
       args: {
         id: {type: new GraphQLNonNull(GraphQLID)},
         title: {type: new GraphQLNonNull(GraphQLString)},
+        tcomment: {type: new GraphQLNonNull(GraphQLString)},
+        bcomment: {type: new GraphQLNonNull(GraphQLString)},
         image: {type: new GraphQLNonNull(GraphQLString)}
       },
-      async resolve(parent, {id, title, image}) {
-        //TODO: object structure shou
-        const meme = {[id]: {title, image}};
+      async resolve(parent, {id, title, tcomment, bcomment, image}) {
+        const url = `${base_url}memes/${id}.json`;
         const options = {
           method: 'put',
-          body: JSON.stringify(meme),
+          body: JSON.stringify({title, tcomment, bcomment, image}),
           headers: {'Content-Type': 'application/json'}
         };
 
-        const res = await fetch(meme_url, options);
+        const res = await fetch(url, options);
         const data = await res.json();
         console.log('=>', data);
         return data;

@@ -1,5 +1,5 @@
 .memes {
-  width: 50%;
+  width: 60%;
   height: auto;
 }
 
@@ -11,6 +11,7 @@
 }
 
 .memes__updater {
+  width: 40%;
   position: fixed;
   top: 0;
   left: 0;

@@ -5,11 +5,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
+  width: 60%;
   height: 100%;
   background: #282c34;
 }
 
-.display-meme__image {
-  width: 100%;
+.display-meme__image--hidden {
+  display: none;
+}
+
+.display-meme__canvas {
+  width: 75%;
+}
+
+.display-meme__download {
+  color: #282c34;
+  background: #fff;
+  text-decoration: none;
+  font-size: .5em;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  transition: .2s;
+}
+
+.display-meme__download:hover {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, .6);
 }

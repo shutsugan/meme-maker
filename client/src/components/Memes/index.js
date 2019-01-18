@@ -4,6 +4,8 @@ import { Query } from 'react-apollo';
 import Meme from '../Meme';
 import AddMeme from '../AddMeme';
 import DisplayMeme from '../DisplayMeme';
+import LoadMeme from '../LoadMeme';
+import DisplayError from '../DisplayError';
 import { MEMES_QUERY } from '../../queries/memes';
 
 import './index.css';
@@ -11,6 +13,15 @@ import './index.css';
 const Memes = _ => {
   const [meme, setMeme] = useState({});
   const handleMeme = meme => setMeme(meme);
+
+  const getMemes = (loading, error, data) => {
+    if (loading) return <LoadMeme loading={loading} />
+    if (error) return <DisplayError error={error} />
+
+    return data.memes.map(meme => (
+      <Meme key={meme.id} meme={meme} clicked={handleMeme} />
+    ));
+  }
 
   return (
     <Fragment>
@@ -23,18 +34,7 @@ const Memes = _ => {
         <div className="memes__list">
           <Query query={MEMES_QUERY}>
             {
-              ({loading, error, data}) => {
-                if (loading) return <div className="loading">Loading...</div>
-                if (error) return <div className="error">error {error}</div>
-
-                return data.memes.map(meme => (
-                  <Meme
-                    key={meme.id}
-                    meme={meme}
-                    clicked={handleMeme}
-                  />
-                ));
-              }
+              ({loading, error, data}) => getMemes(loading, error, data)
             }
           </Query>
         </div>

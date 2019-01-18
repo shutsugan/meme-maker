@@ -1,0 +1,17 @@
+.error {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  background: #f00;
+  color: #fff;
+  line-height: 40px;
+  font-size: .6em;
+}
+
+.error--disabled {
+  display: none;
+}
