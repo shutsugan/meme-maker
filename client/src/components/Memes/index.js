@@ -15,11 +15,11 @@ const Memes = _ => {
   const [meme, setMeme] = useState({});
   const handleMeme = meme => setMeme(meme);
 
-  const getMemes = (loading, error, {memes}) => {
+  const getMemes = (loading, error, data) => {
     if (loading) return <LoadMeme loading={loading} />
     if (error) return <DisplayError error={error} />
 
-    return memes.map(meme => (
+    return data && data.memes.map(meme => (
       <Meme key={meme.id} meme={meme} clicked={handleMeme} />
     ));
   }
