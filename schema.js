@@ -152,13 +152,14 @@ const Mutation = new GraphQLObjectType({
         id: {type: new GraphQLNonNull(GraphQLID)},
         title: {type: new GraphQLNonNull(GraphQLString)},
         tcomment: {type: new GraphQLNonNull(GraphQLString)},
-        bcomment: {type: new GraphQLNonNull(GraphQLString)}
+        bcomment: {type: new GraphQLNonNull(GraphQLString)},
+        image: {type: new GraphQLNonNull(GraphQLString)}
       },
-      async resolve(parent, {id, title, tcomment, bcomment}) {
+      async resolve(parent, {id, title, tcomment, bcomment, image}) {
         const url = `${base_url}memes/${id}.json`;
         const options = {
           method: 'put',
-          body: JSON.stringify({title, tcomment, bcomment}),
+          body: JSON.stringify({title, tcomment, bcomment, image}),
           headers: {'Content-Type': 'application/json'}
         };
 

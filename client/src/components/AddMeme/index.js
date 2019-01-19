@@ -21,10 +21,8 @@ const AddMeme = ({meme}) => {
   const [bcomment, setBottomComment] = useState('');
 
   const handleMutation = store => {
-    const store_data = store.readQuery({query: MEMES_QUERY});
-    const data = store_data.memes.push({
-      id, title, image, tcomment, bcomment
-    });
+    const {memes} = store.readQuery({query: MEMES_QUERY});
+    const data = memes.push({id, title, image, tcomment, bcomment});
 
     store.writeQuery({query: MEMES_QUERY, data})
   }

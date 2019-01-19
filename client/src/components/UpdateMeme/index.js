@@ -16,20 +16,11 @@ const UpdateMeme = ({meme}) => {
   const [tcomment, setTopComment] = useState(meme.tcomment);
   const [bcomment, setBottomComment] = useState(meme.bcomment);
 
-  const variables = {
-    id: meme.id,
-    title,
-    tcomment,
-    bcomment,
-    image: meme.image
-  };
+  const variables = {id: meme.id, image: meme.image, title, tcomment, bcomment};
 
   const handleMutation = store => {
-    const store_data = store.readQuery({query: MEMES_QUERY});
-    const data = store_data.memes.map(item => {
-      if (item.id === meme.id) return {...item, title};
-      else return item;
-    })
+    const {memes} = store.readQuery({query: MEMES_QUERY});
+    const data = memes.filter(item => item.id !== meme.id);
 
     store.writeQuery({query: MEMES_QUERY, data});
   };
