@@ -3,18 +3,16 @@ import { Mutation } from 'react-apollo';
 import uniqid from 'uniqid';
 
 import FileInput from '../FileInput';
-
+import { handleChange } from '../Utils/inputSetter';
 import {
   MEMES_QUERY,
-  MEME_ADD_MUTATION,
-  MEME_UPDATE_MUTATION
+  MEME_ADD_MUTATION
 } from '../../queries/memes';
 
 import './index.css';
 
 const AddMeme = ({meme}) => {
-  const action = !meme.id ? 'Add' : 'Update';
-  const mutation = !meme.id ? MEME_ADD_MUTATION : MEME_UPDATE_MUTATION;
+  if (meme.id) return '';
 
   const id = uniqid();
   const [title, setTitle] = useState('');
@@ -22,38 +20,18 @@ const AddMeme = ({meme}) => {
   const [tcomment, setTopComment] = useState('');
   const [bcomment, setBottomComment] = useState('');
 
-  const variables = !meme.id
-    ? {title, image, tcomment, bcomment}
-    : {
-        id: meme.id,
-        title,
-        tcomment,
-        bcomment,
-        image: meme.image
-      };
-
-  const handleChange = ({target}, setter) => setter(target.value);
-
   const handleMutation = store => {
-    const store_data = store.readQuery({ query: MEMES_QUERY });
-
-    let data;
-    if (meme.id) {
-      data = store_data.memes.map(item => {
-        console.log(item.id);
-        if (item.id === meme.id) return {...item, title};
-        else return item;
-      });
-    } else {
-      data = store_data.memes.push({id, title, image, tcomment, bcomment});
-    }
+    const store_data = store.readQuery({query: MEMES_QUERY});
+    const data = store_data.memes.push({
+      id, title, image, tcomment, bcomment
+    });
 
     store.writeQuery({query: MEMES_QUERY, data})
   }
 
   return (
     <Fragment>
-      <h2>{action} a Meme</h2>
+      <h2>Add a Meme</h2>
       <div className="add-meme">
         <input
           value={title}
@@ -72,11 +50,11 @@ const AddMeme = ({meme}) => {
         />
         <FileInput setter={setImage} />
         <Mutation
-          mutation={mutation}
-          variables={variables}
+          mutation={MEME_ADD_MUTATION}
+          variables={{title, image, tcomment, bcomment}}
           update={handleMutation}>
 
-          {addMeme => <button onClick={addMeme}>{action} Meme</button>}
+          {addMeme => <button onClick={addMeme}>Add Meme</button>}
         </Mutation>
       </div>
     </Fragment>
