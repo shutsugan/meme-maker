@@ -8,6 +8,7 @@ const DisplayMeme = ({meme, clicked}) => {
   let image = null;
   let canvas = null;
   let button = null;
+  let font_size = 0;
 
   useEffect(_ => {
     createMeme(image, canvas, button);
@@ -26,19 +27,20 @@ const DisplayMeme = ({meme, clicked}) => {
   };
 
   const setCanvasDimension = (canvas, image) => {
-    canvas.crossOrigin = "Anonymous";
-    canvas.width = image.width / 2;
-    canvas.height = image.height / 2;
+    canvas.width = image.width;
+    canvas.height = image.height;
+
+    font_size = canvas.width * .05;
   }
 
   const addComment = (context, image, canvas, comment) => {
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    context.font = 'bold 26pt Arial';
+    context.font = `bold ${font_size}pt Arial`;
     context.fillStyle = 'white';
     context.shadowColor="black";
     context.shadowBlur=7;
     context.lineWidth=5;
-    context.fillText(comment.tcomment.toUpperCase(), 16, 40);
+    context.fillText(comment.tcomment.toUpperCase(), 16, font_size + 10);
     context.fillText(comment.bcomment.toUpperCase(), 16, canvas.height - 20);
   };
 
@@ -58,8 +60,8 @@ const DisplayMeme = ({meme, clicked}) => {
         alt={meme.title}
       />
       <canvas
+        ref={node => canvas = node}
         className="display-meme__canvas"
-        className="canvas" ref={node => canvas = node}
       />
     </div>
   );

@@ -12,7 +12,6 @@ const FileInput = ({setter}) => {
   return (
     <div className="file-input">
       <input
-        name="file"
         type="file"
         onChange={event => encodeImage(event)}
         accept=".jpg, .jpeg, .png"

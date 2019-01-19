@@ -32,9 +32,7 @@ const AddMeme = ({meme}) => {
         image: meme.image
       };
 
-  const handleChange = ({target}, setter) => {
-    setter(target.value);
-  };
+  const handleChange = ({target}, setter) => setter(target.value);
 
   const handleMutation = store => {
     const store_data = store.readQuery({ query: MEMES_QUERY });
@@ -47,7 +45,7 @@ const AddMeme = ({meme}) => {
         else return item;
       });
     } else {
-      data = store_data.memes.push({id, title, image});
+      data = store_data.memes.push({id, title, image, tcomment, bcomment});
     }
 
     store.writeQuery({query: MEMES_QUERY, data})
@@ -58,19 +56,16 @@ const AddMeme = ({meme}) => {
       <h2>{action} a Meme</h2>
       <div className="add-meme">
         <input
-          name="title"
           value={title}
           onChange={event => handleChange(event, setTitle)}
           placeholder="Your meme title here"
         />
         <input
-          name="top-comment"
           value={tcomment}
           onChange={event => handleChange(event, setTopComment)}
           placeholder="Top comment here"
         />
         <input
-          name="bottom-comment"
           value={bcomment}
           onChange={event => handleChange(event, setBottomComment)}
           placeholder="Bottom comment here"
