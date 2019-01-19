@@ -165,7 +165,6 @@ const Mutation = new GraphQLObjectType({
 
         const res = await fetch(url, options);
         const data = await res.json();
-        console.log('=>', data);
         return data;
       }
     }
