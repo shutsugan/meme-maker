@@ -4,10 +4,9 @@ import './index.css';
 
 const FileInput = ({setter}) => {
   const encodeImage = ({target}) => {
-    const file = target.files[0];
     const reader = new FileReader();
     reader.addEventListener('loadend', _ => setter(reader.result));
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(target.files[0]);
   };
 
   return (

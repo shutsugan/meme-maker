@@ -33,9 +33,7 @@ const Memes = _ => {
         <h2>Memes List</h2>
         <div className="memes__list">
           <Query query={MEMES_QUERY}>
-            {
-              ({loading, error, data}) => getMemes(loading, error, data)
-            }
+            {({loading, error, data}) => getMemes(loading, error, data)}
           </Query>
         </div>
       </div>
