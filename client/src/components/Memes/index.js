@@ -3,6 +3,7 @@ import { Query } from 'react-apollo';
 
 import Meme from '../Meme';
 import AddMeme from '../AddMeme';
+import UpdateMeme from '../UpdateMeme';
 import DisplayMeme from '../DisplayMeme';
 import LoadMeme from '../LoadMeme';
 import DisplayError from '../DisplayError';
@@ -27,6 +28,7 @@ const Memes = _ => {
     <Fragment>
       <div className="memes memes__updater">
         <AddMeme meme={meme} />
+        <UpdateMeme meme={meme} />
         <DisplayMeme meme={meme} clicked={handleMeme} />
       </div>
       <div className="memes">
