@@ -37,7 +37,7 @@ const DisplayMeme = ({meme, clicked}) => {
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     context.font = `bold ${font_size}pt Arial`;
     context.fillStyle = 'white';
-    context.shadowColor="black";
+    context.shadowColor= 'black';
     context.shadowBlur=7;
     context.lineWidth=5;
     context.fillText(comment.tcomment.toUpperCase(), 16, font_size + 10);
