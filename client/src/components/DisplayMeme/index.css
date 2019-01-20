@@ -36,3 +36,11 @@
 .display-meme__download:hover {
   box-shadow: 0 2px 3px rgba(0, 0, 0, .6);
 }
+
+@media screen and (max-width: 580px) {
+  .display-meme {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
+}

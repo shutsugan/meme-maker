@@ -23,3 +23,31 @@
 .memes__updater h2 {
   color: #282c34;
 }
+
+@media screen and (max-width: 960px) {
+  .memes__list {
+    column-count: 2;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .memes__list {
+    column-count: 1;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .memes {
+    width: 100%;
+  }
+
+  .memes__list {
+    column-count: 1;
+  }
+
+  .memes__updater {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+}
